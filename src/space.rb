@@ -1,35 +1,57 @@
+require File.dirname(__FILE__) + "/piece"
+
 class Space
-  attr_reader :position, :pieces
+  attr_accessor :neighbor_positions, :position
+  attr_reader   :pieces
 
   def initialize(position)
     @position = position
     @pieces = []
+    @neighbor_positions = Array.new(6)
   end
 
-  def place_piece(piece)
-    @pieces << piece
-  end
-
-  def take_pieces(other)
-    validate_movement(other)
-    @pieces << other.pieces
+  def place_pieces(*pieces)
+    # as a convenience, allow color symbols to be passed in instead for full pieces
+    pieces.map!{|p| Piece.new(p)} if pieces[0].class == Symbol
+    @pieces << pieces
     @pieces.flatten!
-    other.clear
+  end
+
+  # a convenience method that can be used when placing a single piece.  
+  def place_piece(piece)
+    place_pieces(piece)
+  end
+
+  # which player, or dvonn, or nil, controls the space
+  def owner
+
+    return nil if @pieces.empty?
+
+    case @pieces[-1].color
+      when :white then :white
+      when :black then :black
+      when :red then :dvonn
+      else raise "Unknown top piece color: #{@pieces[-1].color}"
+    end
+
   end
 
   def clear
-    @pieces = nil
+    @pieces = []
   end
 
-  private
+  # sorting alphabetically first, then reverse by integer produces the typical board configuration
+  def <=>(other)
+    # note that the 6-pos[1] transform only works when assuming the board has max 5 rows for any letter
+    # the point of this transform is to temporarily make :a1 -> :a5, :a2 -> :a4, etc., so ordering will go
+    # :a5, :a4, :a3, :a2, :a1, :b5, :b4...
+    my_transformed_position = (@position[0] + (6 - @position[1].to_i).to_s).to_sym
+    other_transformed_position = (other.position[0] + (6 - other.position[1].to_i).to_s).to_sym
+    my_transformed_position <=> other_transformed_position
+  end
 
-  def validate_movement(other)
-    if line_of_movement_ok? && num_spaces_ok?
-      return true
-    else
-      # return error for stated reasons - not in direct line, piece surrounded, number of spaces incorrect
-#      raise MovementError, "Cannont move stack of size #{other.pieces.size} from #{other.position} to #{self.position}"
-    end
+  def empty?
+    @pieces.empty?
   end
 
 end

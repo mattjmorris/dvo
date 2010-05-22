@@ -1,0 +1,3 @@
+class MoveError < RuntimeError
+    
+end
