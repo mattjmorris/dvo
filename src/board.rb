@@ -47,6 +47,11 @@ class Board
 
   end
 
+  # Returns all occupied positions on the board, in the format: [:a2, :a3, :b2]
+  def occupied_positions
+    spaces.map{ |s| s.position unless s.pieces.empty? }.compact
+  end
+
   # clear the whole board of any pieces
   def clear
     spaces.each{|s| s.clear}

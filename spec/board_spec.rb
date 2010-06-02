@@ -94,6 +94,14 @@ describe Board do
     board.space(:c2).place_piece(:black)
     board.space(:c3).clear
     lambda{board.move_pieces(:black, :c2, :c3)}.should raise_error(MoveError, "Destination position is empty")    
+   end
+
+  it "should know its occupied positions" do
+    board = Board.new
+    board.space(:c2).place_piece(:black)
+    board.space(:c3).place_piece(:white)
+    board.occupied_positions.should include(:c2)
+    board.occupied_positions.should include(:c3)
   end
 
   it "should be able to clear all of its spaces" do

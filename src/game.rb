@@ -11,7 +11,6 @@ module Game
     end
   end
 
-
   # game is over when neither player can make any moves
   def game_over?
     possible_moves(:white).empty? && possible_moves(:black).empty?    
@@ -28,19 +27,28 @@ module Game
     end
   end
 
-  # Look to see if need to remove any pieces after the move because the pieces were cutt off from a dvonn piece
+  # !!!!!!!!!!!!!!!!!!!!!
+  # TODO: This algorithm will do duplicate work for certain spaces - make more efficient!
+  #!!!!!!!!!!!!!!!!!!!!!!!
+  # Look to see if need to remove any pieces after the move because the pieces were cut off from a dvonn piece
+  # Note that this method aliases the move_pieces method
   def move_pieces_with_cutoffs(player, origin_position, destination_position)
     move_pieces_orig(player, origin_position, destination_position)
-    # find all spaces that contain a dvonn piece
-    dvonn_spaces = spaces.find_all{ |s| s.pieces.collect(&:color).include?(:red) }
-    # now, find all spaces that are connected to the dvonns
-    connected_spaces = []
-    dvonn_spaces.each do |dvonn_space|
-      # TODO - traverse all connected paths
-      occupied_neighbors = dvonn_space.neighbor_positions.find{ |p| !space(p).pieces.empty? }
-      connected_spaces << occupied_neighbors
+    # find all spaces that contain a dvonn piece.  Conceptualize these as starters of an infection.
+    infected_positions = dvonn_spaces
+    # now, find which spaces are further infected
+    newly_infected = infected_positions.map{ |i| occupied_neighbors(i) }.flatten
+
+    infected = newly_infected
+    while !newly_infected.empty?
+      newly_infected = newly_infected.map{ |i| occupied_neighbors(i) }.flatten - infected
+      infected += newly_infected
     end
-    # remove pieces from any spaces that are not members of connected_spaces
+
+    # remove pieces from any spaces that are not 'infected' by dvonn's
+    to_remove = occupied_positions - infected.uniq
+
+    to_remove.each{ |p| space(p).clear }
     
   end
 
@@ -48,6 +56,15 @@ module Game
 
   def cumulative_stack_size(color)
     spaces.find_all{|s| s.owner == color}.inject(0){|sum, space| sum += space.pieces.size}
+  end
+
+  def dvonn_spaces
+    spaces.find_all{ |s| s.pieces.collect(&:color).include?(:red) }.map{ |s| s.position}
+  end
+
+  def occupied_neighbors(position)
+puts "looking at occupied neighbors for #{position}"
+    space(position).neighbor_positions.find_all{ |p| !space(p).pieces.empty? }
   end
 
 end

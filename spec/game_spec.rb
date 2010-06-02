@@ -35,12 +35,25 @@ describe "A board extended with game" do
   it "should remove pieces that have been cut off" do
     @board.space(:b2).place_piece(:black)
     @board.space(:c2).place_piece(:white)
+    @board.space(:d1).place_piece(:white)
     @board.space(:d2).place_piece(:red)
+    @board.space(:e1).place_piece(:white)
     @board.space(:e2).place_piece(:white)
+    @board.space(:e3).place_piece(:black)
+    @board.space(:e4).place_piece(:black)
+    @board.space(:e5).place_piece(:white)
+    @board.space(:f1).place_piece(:white)
+    @board.space(:g1).place_piece(:red)
+    @board.space(:i2).place_piece(:red)
+    @board.space(:j2).place_piece(:black)
     @board.move_pieces(:white, :c2, :d2)
     @board.space(:b2).should be_empty
-    @board.space(:e2).should_not be_empty
-    # TODO - message system that reports which pieces were cutt off and removed
+    %w(d1 d2 e1 e2 e3 e4 e5 f1 g1 i2 j2).each do |pos|
+      @board.space(pos.to_sym).should_not be_empty
+    end
+
+    
+    # TODO - message system that reports which pieces were cut off and removed
   end
 
 end
