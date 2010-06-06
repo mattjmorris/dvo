@@ -54,4 +54,23 @@ class Space
     @pieces.empty?
   end
 
+  # TODO: needs unit test
+  def pretty_print
+    
+    letter = case owner
+      when :white then "w"
+      when :black then "b"
+      when :dvonn then "r"
+      else "."
+    end
+
+    # if this is a stack that has a dvonn, make the letter capital
+    letter.upcase if ((letter == "w" || "b") && !@pieces.empty? && @pieces[0].color == :red)
+
+    letter += @pieces.size.to_s unless @pieces.empty?
+
+    letter
+
+  end
+
 end

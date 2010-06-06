@@ -1,33 +1,45 @@
 Feature: Play a game
 
-      a3
-    a4
-  a5
-    b5
-      c5
+       c1  d1  e1  f1  g1  h1  i1  j1  k1            1  .   .   .   .   .   .   .   .   .
+    b2  c2  d2  e2  f2  g2  h2  i2  j2  k2         2  .   .   .   .   .   .   .   .   .   .
+  a3  b3  c3  d3  e3  f3  g3  h3  i3  j3  k3     3  .   .   .   .   .   .   .   .   .   .   .
+    a4  b4  c4  d4  e4  f4  g4  h4  i4  j4         4  .   .   .   .   .   .   .   .   .   .   k
+      a5  b5  c5  d5  e5  f5  g5  h5  i5             5  .   .   .   .   .   .   .   .   .   j
+                                                          a   b   c   d   e   f   g   h   i
 
-  
-
-                         :a5, :a4, :a3,
-                      :b5, :b4, :b3, :b2,
-                    :c5, :c4, :c3, :c2, :c1,
-                  :d5, :d4, :d3, :d2, :d1,
-                :e5, :e4, :e3, :e2, :e1,
-              :f5, :f4, :f3, :f2, :f1,
-            :g5, :g4, :g3, :g2, :g1,
-          :h5, :h4, :h3, :h2, :h1,
-       :i5, :i4, :i3, :i2, :i1,
-         :j4, :j3, :j2, :j1,
-           :k3, :k2, :k1
 
   Scenario: Phase 1
     Given a blank board
     And the following moves:
-    | piece  | position |
-    | red    | d3       |
-    | red    | e4       |
-    | red    | f4       |
-    | black  | g3       |
-    | white  | g2       |
+    | piece    | r  | r  | r  | b  | w  |
+    | position | d3 | e4 | f4 | g3 | a5 |
 
-    Then I should see the board
+    Then I should see the board:
+   |                stacks                     |
+   |     .   .   .   .   .   .   .   .   .     |
+   |   .   .   .   .   .   .   .   .   .   .   |
+   | .   .   .  r1   .   .  b1   .   .   .   . |
+   |   .   .   .   .  r1  r1   .   .   .   .   |
+   |    w1   .   .   .   .   .   .   .   .     |
+
+
+  Scenario: Phase 2
+    Given the following board:
+   |                stacks                     |
+   |    w1  b1  w1  b1  w1  b1  w1  b1  w1     |
+   |  w1  b1  b1  b1  b1  w1  b1  b1  b1  w1   |
+   |w1  b1  w1  r1  b1  b1  b1  b1  w1  w1  w1 |
+   |  w1  b1  w1  b1  r1  r1  b1  w1  w1  b1   |
+   |    w1  b1  b1  b1  w1  b1  w1  w1  w1     |
+
+    When I permform the following moves:
+    | player | position_1 | position_2  |
+    | white  |     a3     |     b3      |
+
+    Then I should see the board:
+   |                stacks                     |
+   |    w1  b1  w1  b1  w1  b1  w1  b1  w1     |
+   |  w1  b1  b1  b1  b1  w1  b1  b1  b1  w1   |
+   | .  w2  w1  r1  b1  b1  b1  b1  w1  w1  w1 |
+   |  w1  b1  w1  b1  r1  r1  b1  w1  w1  b1   |
+   |    w1  b1  b1  b1  w1  b1  w1  w1  w1     |

@@ -61,6 +61,15 @@ class Board
 
   def validate_move(player, origin_position, destination_position)
 
+# ------------ DELETE THIS BEFORE CHECKING IN ! ----------------
+puts
+puts "*" * 50
+p player
+p origin_position
+p destination_position
+puts "*" * 50
+# --------------------------------------------------------------
+
     # validate that the top piece at origin is owned by the player requesting the move
     raise MoveError,"Origin position is not controlled by #{player}" unless space(origin_position).owner == player
 
@@ -76,6 +85,13 @@ class Board
   end
 
   def position_has_at_least_one_empty_neighbor(position)
+# ------------ DELETE THIS BEFORE CHECKING IN ! ----------------
+puts
+puts "*" * 50
+p space(position).neighbor_positions
+puts "*" * 50
+# --------------------------------------------------------------
+
     space(position).neighbor_positions.find{|p| space(p).pieces.empty?}
   end
 
