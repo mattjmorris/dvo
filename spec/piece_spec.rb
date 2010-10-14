@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/../src/piece"
 
 describe Piece do
 
-  it "should be black, white, or red" do
+  it "is black, white, or red" do
 
     black = Piece.new(:black)
     black.should be_black
@@ -22,7 +22,7 @@ describe Piece do
 
   end
 
-  it "should raise an ArgumentError if instantiated with an incorrect color" do
+  it "raises an ArgumentError if instantiated with an incorrect color" do
     expect { Piece.new(:green) }.to raise_error(ArgumentError, "Colors must be :black, :white, or :red")
   end
 

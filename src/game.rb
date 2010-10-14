@@ -1,8 +1,6 @@
 # Right now this represents the 'standard' Dvonn game and its rules
 require File.dirname(__FILE__) + "/analyzer"
 
-# TODO: Enforce rules for different parts of the game - board setup, ...
-
 module Game
   include Analyzer
 

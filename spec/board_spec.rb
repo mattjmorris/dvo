@@ -8,7 +8,7 @@ describe Board do
     @board = Board.new
   end
 
- it "should contain all of the spaces on a dvonn board" do
+ it "contains all of the spaces on a dvonn board" do
     @board.spaces.length.should == 49
     @board.spaces.sort.map{|s| s.position}.should ==
                         [:a5, :a4, :a3,
@@ -24,14 +24,14 @@ describe Board do
            :k3, :k2, :k1]
   end
 
-  it "it's spaces should know the positions of their neighbors" do
+  it "it's spaces know the positions of their neighbors" do
     @board.space(:a5).neighbor_positions.should == [:b4, :b5, nil, nil, nil, :a4]
     @board.space(:c1).neighbor_positions.should == [nil, :d1, :c2, :b2, nil, nil]
     @board.space(:c2).neighbor_positions.should == [:d1, :d2, :c3, :b3, :b2, :c1]
     @board.space(:k3).neighbor_positions.should == [nil, nil, nil, :j4, :j3, :k2]
   end
 
-  it "should report all reachable positions, in clockwise order, when given a starting position and number of hops" do
+  it "reports all reachable positions, in clockwise order, when given a starting position and number of hops" do
     @board.reachable_positions(:f3, 0).should == [:f3, :f3, :f3, :f3, :f3, :f3]
     @board.reachable_positions(:f3, 1).should == [:g2, :g3, :f4, :e4, :e3, :f2]
     @board.reachable_positions(:f3, 2).should == [:h1, :h3, :f5, :d5, :d3, :f1]
@@ -41,12 +41,12 @@ describe Board do
     @board.reachable_positions(:f3, 6).should == [nil, nil, nil, nil, nil, nil]
   end
 
-  it "should default to using the number of pieces on the space at a position when reporting reachable positions" do
+  it "defaults to using the number of pieces on the space at a position when reporting reachable positions" do
     @board.space(:f3).place_pieces(Piece.new(:black), Piece.new(:white))
     @board.reachable_positions(:f3).should == [:h1, :h3, :f5, :d5, :d3, :f1]
   end
 
-  it "should move pieces from one space to another, assuming no rules are violated" do
+  it "will move pieces from one space to another, assuming no rules are violated" do
     board = Board.new
     board.space(:c2).place_piece(:black)
     board.space(:c3).place_piece(:white)
@@ -56,14 +56,14 @@ describe Board do
     board.space(:c3).owner.should be(:black)
   end
 
-  it "should raise a MoveError if a player tries to move pieces from a space that they do not control" do
+  it "raises a MoveError if a player tries to move pieces from a space that they do not control" do
     board = Board.new
     board.space(:c2).place_piece(:black)
     board.space(:c3).place_piece(:white)
     lambda{board.move_pieces(:white, :c2, :c3)}.should raise_error(MoveError, "Origin position is not controlled by white")    
   end
 
-  it "should raise a MoveError if a player tries to move pieces from a space that is surrounded" do
+  it "raises a MoveError if a player tries to move pieces from a space that is surrounded" do
     board = Board.new
     c2_neighbors = [:d1, :d2, :c3, :b3, :b2, :c1]
     c2_neighbors.each{|p| board.space(p).place_piece(:black)}
@@ -71,14 +71,14 @@ describe Board do
     lambda{board.move_pieces(:white, :c2, :c3)}.should raise_error(MoveError, "Origin position is surrounded")
   end
 
-  it "should raise a MoveError if a player tries to move pieces to a space that is not along a direct line" do
+  it "raises a MoveError if a player tries to move pieces to a space that is not along a direct line" do
     board = Board.new
     board.space(:c5).place_piece(:black)
     board.space(:b4).place_piece(:white)
     lambda{board.move_pieces(:black, :c5, :b4)}.should raise_error(MoveError, "Destination is not reachable from origin")
   end
 
-  it "should raise a MoveError if a player tries to move pieces to a space that is the wrong distance away" do
+  it "raises a MoveError if a player tries to move pieces to a space that is the wrong distance away" do
     board = Board.new
     board.space(:d3).place_pieces(:white, :black)
     board.space(:c3).place_piece(:white)
@@ -89,14 +89,14 @@ describe Board do
     lambda{board.move_pieces(:black, :d3, :g3)}.should raise_error(MoveError, "Destination is not reachable from origin")
   end
 
-   it "should raise a MoveError if a player tries to move pieces to a space that is empty" do
+   it "raises a MoveError if a player tries to move pieces to a space that is empty" do
     board = Board.new
     board.space(:c2).place_piece(:black)
     board.space(:c3).clear
     lambda{board.move_pieces(:black, :c2, :c3)}.should raise_error(MoveError, "Destination position is empty")    
    end
 
-  it "should know its occupied positions" do
+  it "knows its occupied positions" do
     board = Board.new
     board.space(:c2).place_piece(:black)
     board.space(:c3).place_piece(:white)
@@ -104,7 +104,7 @@ describe Board do
     board.occupied_positions.should include(:c3)
   end
 
-  it "should be able to clear all of its spaces" do
+  it "can clear all of its spaces" do
     board = Board.new
     board.space(:c2).place_piece(:black)
     board.space(:c3).place_piece(:white)
