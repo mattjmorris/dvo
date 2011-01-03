@@ -3,27 +3,33 @@ require File.dirname(__FILE__) + "/../src/piece"
 
 describe Piece do
 
-  it "should be black, white, or red" do
+  it "has a color of :black, white, or red" do
 
     black = Piece.new(:black)
-    black.should be_black
-    black.should_not be_white
-    black.should_not be_red
+    black.color.should == :black
 
     white = Piece.new(:white)
-    white.should be_white
-    white.should_not be_black
-    white.should_not be_red
+    white.color.should == :white
 
     red = Piece.new(:red)
-    red.should be_red
-    red.should_not be_black
-    red.should_not be_white
+    red.color.should == :red
+  end
+
+  it ":b, :w, and :r may be used as short-cuts for :black, :white, and :red" do
+
+    black = Piece.new(:b)
+    black.color.should == :black
+
+    white = Piece.new(:w)
+    white.color.should == :white
+
+    red = Piece.new(:r)
+    red.color.should == :red
 
   end
 
   it "should raise an ArgumentError if instantiated with an incorrect color" do
-    expect { Piece.new(:green) }.to raise_error(ArgumentError, "Colors must be :black, :white, or :red")
+    expect { Piece.new(:green) }.to raise_error(ArgumentError, "Colors must be :black/:b, :white/:w, or :red/:r.  You passed in green")
   end
 
 end

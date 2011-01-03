@@ -4,25 +4,25 @@ require File.dirname(__FILE__) + "/../src/piece"
 
 describe Space do
 
-  it "should have a position" do
+  it "has a position" do
     a5 = Space.new(:a5)
     a5.position.should be(:a5)
   end
 
-  it "should contain zero or more pieces" do
+  it "contains zero or more pieces" do
     a5 = Space.new(:a5)
     a5.pieces.should be_empty
     a5.place_pieces(Piece.new(:black), Piece.new(:white))
     a5.pieces.should_not be_empty
   end
 
-  it "should hold an array of neighbor positions" do
+  it "holds an array of neighbor positions" do
     a5 = Space.new(:a5)
     a5.neighbor_positions = [:b4, :b5, nil, nil, nil, :a4]
     a5.neighbor_positions.should_not be_empty
   end
 
-  it "should report which player owns that space, based on the color of the top piece" do
+  it "reports which player owns that space, based on the color of the top piece" do
 
     a5 = Space.new(:a5)
 

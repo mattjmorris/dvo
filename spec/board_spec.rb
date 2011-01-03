@@ -68,7 +68,7 @@ describe Board do
     c2_neighbors = [:d1, :d2, :c3, :b3, :b2, :c1]
     c2_neighbors.each{|p| board.space(p).place_piece(:black)}
     board.space(:c2).place_piece(:white)
-    lambda{board.move_pieces(:white, :c2, :c3)}.should raise_error(MoveError, "Origin position is surrounded")
+    lambda{board.move_pieces(:white, :c2, :c3)}.should raise_error(MoveError, "Cannot move c2 because it is surrounded")
   end
 
   it "should raise a MoveError if a player tries to move pieces to a space that is not along a direct line" do

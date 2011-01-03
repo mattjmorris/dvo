@@ -1,7 +1,10 @@
 require File.dirname(__FILE__) + "/space"
 require File.dirname(__FILE__) + "/move_error"
+require File.dirname(__FILE__) + "/loggit"
 
 class Board
+  include Loggit
+
   attr_reader :spaces
 
   POSITIONS_NOT_ON_BOARD ||= [:a1, :a2, :b1, :j5, :k4, :k5]
@@ -23,9 +26,13 @@ class Board
 
   # move pieces from one origin position's space to destination position's space, returning errors if any rules are violated
   def move_pieces(player, origin_position, destination_position)
+
     validate_move(player, origin_position, destination_position)
     space(destination_position).place_pieces(space(origin_position).pieces)
     space(origin_position).clear
+
+    $LOG.info("#{player} moved #{origin_position} to #{destination_position}")
+
   end
 
   # Returns positions, in 'clockwise' order, that can be reached within num_hops from the starting position
@@ -61,20 +68,11 @@ class Board
 
   def validate_move(player, origin_position, destination_position)
 
-# ------------ DELETE THIS BEFORE CHECKING IN ! ----------------
-puts
-puts "*" * 50
-p player
-p origin_position
-p destination_position
-puts "*" * 50
-# --------------------------------------------------------------
-
     # validate that the top piece at origin is owned by the player requesting the move
     raise MoveError,"Origin position is not controlled by #{player}" unless space(origin_position).owner == player
 
     # make sure origin position is not surrounded
-    raise MoveError,"Origin position is surrounded" unless position_has_at_least_one_empty_neighbor(origin_position)
+    raise MoveError,"Cannot move #{origin_position} because it is surrounded" unless position_has_at_least_one_empty_neighbor(origin_position)
 
     # validate that the destination is reachable from the origin
     raise MoveError,"Destination is not reachable from origin" unless reachable_positions(origin_position).include?(destination_position)
@@ -85,13 +83,8 @@ puts "*" * 50
   end
 
   def position_has_at_least_one_empty_neighbor(position)
-# ------------ DELETE THIS BEFORE CHECKING IN ! ----------------
-puts
-puts "*" * 50
-p space(position).neighbor_positions
-puts "*" * 50
-# --------------------------------------------------------------
-
+    # automatically return true if this is an 'edge' position (has nil neighbors)
+    return true if space(position).neighbor_positions.include?(nil)
     space(position).neighbor_positions.find{|p| space(p).pieces.empty?}
   end
 

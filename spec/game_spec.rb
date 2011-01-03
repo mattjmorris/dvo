@@ -51,9 +51,6 @@ describe "A board extended with game" do
     %w(d1 d2 e1 e2 e3 e4 e5 f1 g1 i2 j2).each do |pos|
       @board.space(pos.to_sym).should_not be_empty
     end
-
-    
-    # TODO - message system that reports which pieces were cut off and removed
   end
 
 end

@@ -1,18 +1,18 @@
 require File.dirname(__FILE__) + "/piece"
 
 class Space
-  attr_accessor :neighbor_positions, :position
-  attr_reader   :pieces
+  attr_accessor :position, :neighbor_positions
+  attr_reader :pieces
 
   def initialize(position)
-    @position = position
-    @pieces = []
+    @position           = position
+    @pieces             = []
     @neighbor_positions = Array.new(6)
   end
 
   def place_pieces(*pieces)
     # as a convenience, allow color symbols to be passed in instead for full pieces
-    pieces.map!{|p| Piece.new(p)} if pieces[0].class == Symbol
+    pieces.map! { |p| Piece.new(p) } if pieces[0].class == Symbol
     @pieces << pieces
     @pieces.flatten!
   end
@@ -27,6 +27,7 @@ class Space
 
     return nil if @pieces.empty?
 
+    # TODO - can I use 'peek' here?  Might make code more obvious
     case @pieces[-1].color
       when :white then :white
       when :black then :black
@@ -45,7 +46,7 @@ class Space
     # note that the 6-pos[1] transform only works when assuming the board has max 5 rows for any letter
     # the point of this transform is to temporarily make :a1 -> :a5, :a2 -> :a4, etc., so ordering will go
     # :a5, :a4, :a3, :a2, :a1, :b5, :b4...
-    my_transformed_position = (@position[0] + (6 - @position[1].to_i).to_s).to_sym
+    my_transformed_position    = (@position[0] + (6 - @position[1].to_i).to_s).to_sym
     other_transformed_position = (other.position[0] + (6 - other.position[1].to_i).to_s).to_sym
     my_transformed_position <=> other_transformed_position
   end
@@ -56,13 +57,17 @@ class Space
 
   # TODO: needs unit test
   def pretty_print
-    
+
     letter = case owner
-      when :white then "w"
-      when :black then "b"
-      when :dvonn then "r"
-      else "."
-    end
+               when :white then
+                 "w"
+               when :black then
+                 "b"
+               when :dvonn then
+                 "r"
+               else
+                 "."
+             end
 
     # if this is a stack that has a dvonn, make the letter capital
     letter.upcase if ((letter == "w" || "b") && !@pieces.empty? && @pieces[0].color == :red)

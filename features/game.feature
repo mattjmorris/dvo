@@ -23,7 +23,7 @@ Feature: Play a game
    |    w1   .   .   .   .   .   .   .   .     |
 
 
-  Scenario: Phase 2
+  Scenario: Start of Phase 2
     Given the following board:
    |                stacks                     |
    |    w1  b1  w1  b1  w1  b1  w1  b1  w1     |
@@ -43,3 +43,33 @@ Feature: Play a game
    | .  w2  w1  r1  b1  b1  b1  b1  w1  w1  w1 |
    |  w1  b1  w1  b1  r1  r1  b1  w1  w1  b1   |
    |    w1  b1  b1  b1  w1  b1  w1  w1  w1     |
+
+
+  Scenario: Phase 2 - cut offs
+    Given the following board:
+   |                stacks                     |
+   |    w1  b1  w1   .  w1  b1  w1  b1  w1     |
+   |  w1  b1  b1  b1   .  w1  b1  b1  b1  w1   |
+   |w1  b1  w1  r1  b1   .  b1  b1  w1  w1  w1 |
+   |  w1  b1  w1  b1  r1   .  b1  w1  w1  b1   |
+   |    w1  b1  b1  b1  w1  b1  w1  w1  w1     |
+
+    When I permform the following moves:
+    | player | position_1 | position_2  |
+    | black  |     f5     |     e5      |
+
+    Then I should see the board:
+
+      |                stacks                     |
+   |    w1  b1  w1   .  w1  b1  w1  b1  w1     |
+   |  w1  b1  b1  b1   .  w1  b1  b1  b1  w1   |
+   |w1  b1  w1  r1  b1   .  b1  b1  w1  w1  w1 |
+   |  w1  b1  w1  b1  r1   .  b1  w1  w1  b1   |
+   |    w1  b1  b1  b1  w1  b1  w1  w1  w1     |
+
+#   |                stacks                     |
+#   |    w1  b1  w1   .   .   .   .   .   .     |
+#   |  w1  b1  b1  b1   .   .   .   .   .   .   |
+#   |w1  b1  w1  r1  b1   .   .   .   .   .   . |
+#   |  w1  b1  w1  b1  r1   .   .   .   .   .   |
+#   |    w1  b1  b1  b1  b2   .   .   .   .     |
