@@ -13,7 +13,7 @@ describe "A board extended with game" do
     @board.clear
   end
 
-  it "should tell you when a game is over" do
+  it "reports that a game is over when no more moves can be made" do
     @board.space(:c2).place_piece(:black)
     @board.space(:b2).place_piece(:red)
     @board.game_over?.should be(false)
@@ -21,7 +21,7 @@ describe "A board extended with game" do
     @board.game_over?.should be(true)
   end
 
-  it "should tell you who the current leader is" do
+  it "tells you who the current leader is" do
     @board.space(:b2).place_piece(:black)
     @board.space(:c2).place_piece(:red)
     @board.space(:d2).place_piece(:white)

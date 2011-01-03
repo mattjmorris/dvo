@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + "/../src/piece"
 
 describe Space do
 
-  it "has a position" do
+  it "is instantiated with a position" do
     a5 = Space.new(:a5)
     a5.position.should be(:a5)
   end
